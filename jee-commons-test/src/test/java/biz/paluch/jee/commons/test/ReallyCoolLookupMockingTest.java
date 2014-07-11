@@ -2,6 +2,12 @@ package biz.paluch.jee.commons.test;
 
 import static org.junit.Assert.assertSame;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 
 import org.junit.Rule;
@@ -37,8 +43,20 @@ public class ReallyCoolLookupMockingTest {
     }
 
     @Test
-    public void testCdiLookup() throws Exception {
-        assertSame(mock, BeanLookup.lookupBean(BeanLookup.beanManager(), SimpleDependency.class));
+    public void testCdiLookupUsingBeanLookup() throws Exception {
+        assertSame(mock, BeanLookup.lookupBean(SimpleDependency.class));
+    }
+
+    @Test
+    public void testCdiLookupUsingBeanManager() throws Exception {
+        BeanManager beanManager = InitialContext.doLookup("java:comp/BeanManager");
+        Set<Bean<?>> beans = beanManager.getBeans(SimpleDependency.class);
+        Iterator<Bean<?>> iterator = beans.iterator();
+
+        Bean<?> bean = iterator.next();
+        CreationalContext<?> ctx = beanManager.createCreationalContext(bean);
+        SimpleDependency dependency = (SimpleDependency) beanManager.getReference(bean, bean.getBeanClass(), ctx);
+        assertSame(mock, dependency);
     }
 
 }
