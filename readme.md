@@ -25,10 +25,7 @@ The packages are available as Maven artifacts
     <version>1.0-SNAPSHOT</version>
     <scope>test</scope>
 </dependency>
-
 ```
-
-or http://search.maven.org/remotecontent?filepath=biz/paluch/jee/commons/jee-commons-test/1.0-SNAPSHOT/jee-commons-test-1.0-SNAPSHOT.jar
 
 
 ## Quick start
