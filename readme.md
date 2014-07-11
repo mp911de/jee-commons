@@ -26,7 +26,7 @@ The packages are available as Maven artifacts
     <scope>test</scope>
 </dependency>
 ```
-
+or snapshots at https://oss.sonatype.org/content/repositories/snapshots/
 
 ## Quick start
 
