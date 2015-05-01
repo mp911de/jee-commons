@@ -16,8 +16,7 @@ public class JndiLookupStrategy implements NamingLookupStrategy {
     public <T> T doLookup(String name) {
         try {
             return InitialContext.doLookup(name);
-        } catch (NamingException e) {
-            throw new IllegalArgumentException(e);
-        }
+        } catch (NamingException e) {}
+        return null;
     }
 }

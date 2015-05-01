@@ -10,9 +10,14 @@ import javax.enterprise.inject.spi.BeanManager;
 public final class BeanLookup {
 
     /**
-     * Default JNDI name of the BeanManager.
+     * Default JNDI names of the BeanManager.
      */
-    public static final String BEANMANAGER_JNDI_NAME = "java:comp/BeanManager";
+    public static final String[] BEANMANAGER_JNDI_NAMES = {"java:comp/BeanManager", "java:comp/env/BeanManager"};
+    
+    /**
+     * Default BeanManager.
+     */
+    private static BeanManager defaultBeanManager;
 
     /**
      * Default lookup strategy is using the BeanManager directly.
@@ -126,8 +131,20 @@ public final class BeanLookup {
      * 
      * @return the BeanManager
      */
-    public static BeanManager beanManager() {
-        return NamingLookup.doLookup(BEANMANAGER_JNDI_NAME);
+    public static BeanManager beanManager() {        
+        if(defaultBeanManager == null) {
+            defaultBeanManager = beanManagerLookup();            
+        }
+        return defaultBeanManager;
+    }
+    
+    /**
+     * Set a default bean manager manually
+     * 
+     * @param beanManager 
+     */
+    public static void setDefaultBeanManager(BeanManager beanManager) {
+        BeanLookup.defaultBeanManager = beanManager;
     }
 
     /**
@@ -135,6 +152,15 @@ public final class BeanLookup {
      */
     public static void reset() {
         lookupStrategy = new BeanManagerLookupStrategy();
+    }
+    
+    private static BeanManager beanManagerLookup() {
+        for(String jndiName : BEANMANAGER_JNDI_NAMES) {
+            BeanManager beanManager = NamingLookup.doLookup(jndiName);
+            if(beanManager != null)
+                return beanManager;
+        }
+        throw new RuntimeException("Did not found any BeanManager!");
     }
 
 }
