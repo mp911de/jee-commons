@@ -33,11 +33,10 @@ public class CachedNamingLookupBeanManagerProvider implements BeanManagerProvide
                 }
                 else {
                    noBeanManagerFound.addSuppressed(ex);
-                }
-                
+                }                
             }
         }
-        if(noBeanManagerFound != null)
+        if(beanManager == null)
             throw noBeanManagerFound;
     }
 }
