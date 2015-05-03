@@ -160,7 +160,7 @@ public final class BeanLookup {
             if(beanManager != null)
                 return beanManager;
         }
-        throw new RuntimeException("Did not found any BeanManager!");
+        throw new IllegalStateException("Did not found any BeanManager!");
     }
 
 }
