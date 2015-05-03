@@ -118,6 +118,14 @@ public final class BeanLookup {
     public static void setLookupStrategy(BeanLookupStrategy strategy) {
         BeanLookup.lookupStrategy = strategy;
     }
+    
+    public static BeanManagerProvider getBeanManagerProvider() {
+        return beanManagerProvider;
+    }
+
+    public static void setBeanManagerProvider(BeanManagerProvider beanManagerProvider) {
+        BeanLookup.beanManagerProvider = beanManagerProvider;
+    }
 
     /**
      * Lookup the BeanManager using {@code NamingLookup}
