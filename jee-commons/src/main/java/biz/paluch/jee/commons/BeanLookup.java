@@ -8,16 +8,14 @@ import javax.enterprise.inject.spi.BeanManager;
  * Utility to lookup beans.
  */
 public final class BeanLookup {
-
-    /**
-     * Default JNDI name of the BeanManager.
-     */
-    public static final String BEANMANAGER_JNDI_NAME = "java:comp/BeanManager";
-
     /**
      * Default lookup strategy is using the BeanManager directly.
      */
     private static BeanLookupStrategy lookupStrategy = new BeanManagerLookupStrategy();
+    /**
+     * Default strategy for obtaining the bean manager.
+     */
+    private static BeanManagerProvider beanManagerProvider = new CachedNamingLookupBeanManagerProvider();
 
     private BeanLookup() {
     }
@@ -120,21 +118,28 @@ public final class BeanLookup {
     public static void setLookupStrategy(BeanLookupStrategy strategy) {
         BeanLookup.lookupStrategy = strategy;
     }
+    
+    public static BeanManagerProvider getBeanManagerProvider() {
+        return beanManagerProvider;
+    }
+
+    public static void setBeanManagerProvider(BeanManagerProvider beanManagerProvider) {
+        BeanLookup.beanManagerProvider = beanManagerProvider;
+    }
 
     /**
      * Lookup the BeanManager using {@code NamingLookup}
      * 
      * @return the BeanManager
      */
-    public static BeanManager beanManager() {
-        return NamingLookup.doLookup(BEANMANAGER_JNDI_NAME);
+    public static BeanManager beanManager() {        
+        return beanManagerProvider.getBeanManager();
     }
-
+ 
     /**
      * Reset the lookup strategy to default.
      */
     public static void reset() {
         lookupStrategy = new BeanManagerLookupStrategy();
     }
-
 }
